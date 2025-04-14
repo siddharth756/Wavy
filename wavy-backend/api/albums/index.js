@@ -7,7 +7,7 @@ const express = require('express');
 const app = express()
 
 app.use((req, res, next) => {
-  const allowedOrigins = [process.env.ALLOWED_ORIGIN_URL1, process.env.ALLOWED_ORIGIN_URL2];
+  const allowedOrigins = [process.env.ALLOWED_ORIGIN_URL1, process.env.ALLOWED_ORIGIN_URL2, process.env.ALLOWED_ORIGIN_URL3];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
