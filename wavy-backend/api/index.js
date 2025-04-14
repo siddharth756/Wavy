@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express()
 
 app.use(cors())
+app.options('*', cors());
 
 app.get('/', (req, res) => {
     res.send(`
@@ -31,7 +32,7 @@ app.get('/', (req, res) => {
         </style>
       </head>
       <body>
-        <h1>Welcome to Wavy</h1>
+        <h1>🎵 Welcome to Wavy</h1>
       </body>
       </html>
     `);

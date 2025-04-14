@@ -9,6 +9,7 @@ const app = express()
 app.use(cors({
   origin: process.env.CROSS_ORIGIN_URL
 }));
+app.options('*', cors());
 
 
 app.use(async (req,res, next) => {
