@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "api/**/*.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "/api/albums", "dest": "/api/albums/index.js" },
+    { "src": "/api/albums/([^/]+)", "dest": "/api/albums/index.js" },
+    { "src": "/api/albums/([^/]+)/tracks", "dest": "/api/albums/index.js" },
+    { "src": "/api/tracks", "dest": "/api/tracks/index.js" },
+    { "src": "/api/tracks/([^/]+)", "dest": "/api/tracks/index.js" }
+  ]
+}
