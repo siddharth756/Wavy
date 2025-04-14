@@ -30,7 +30,7 @@ function Album({ allItems }) {
                                         <div className="border border-white rounded-3xl overflow-hidden">
                                             <Link to={`/albums/${album._id}`}>
                                                 <img
-                                                    src={`http://localhost:5000${album.albumImage}`}
+                                                    src={`${album.albumImage}`}
                                                     alt={album.artist}
                                                     className="w-full h-auto object-cover transition-all aspect-1/1 duration-300 hover:scale-[1.05] ease-in-out"
                                                 />

@@ -10,20 +10,23 @@ import { useNavigate } from 'react-router-dom';
 
 function AlbumDetail() {
   const { id } = useParams()
+  console.log(id)
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (id) {
       dispatch(fetchAlbumById(id))
+      console.log("done")
       dispatch(fetchTracksByAlbumId(id))
+      console.log("done2")
       dispatch(clearSelectedItem())
     }
   }, [id, dispatch])
-
+  
   const handleSelectTrack = (id) => {
     dispatch(fetchTrackByTrackId(id))
   }
-
+  
   const navigate = useNavigate()
 
   const handleBack = () => {
@@ -39,6 +42,7 @@ function AlbumDetail() {
   const tracks = useSelector((state) => state.albums.albumTracks)
   const selectedTrack = useSelector((state) => state.albums.selectedTrack)
 
+  console.log("============== ", tracks)
   return (
     <>
       {album && tracks && (
@@ -50,7 +54,7 @@ function AlbumDetail() {
               {/* Album Image */}
               <div className="w-40 h-40 md:w-48 md:h-48 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
                 <img
-                  src={`http://localhost:5000${album.albumImage}`}
+                  src={`${album.albumImage}`}
                   alt={`${album.artist} Album Cover`}
                   className="w-full h-full object-cover rounded-md"
                 />

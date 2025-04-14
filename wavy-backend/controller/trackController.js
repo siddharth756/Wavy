@@ -49,7 +49,7 @@ exports.getTrackById = async (req, res) => {
         if (!track) {
             return res.status(404).json({ message: "Track not found" });
         }
-        res.json({ status: "Success", track })
+        res.json({ status: "Success", track: track })
     } catch (err) {
         res.json({
             status: "failed",

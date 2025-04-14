@@ -63,7 +63,7 @@ exports.getTracksByAlbumId = async (req, res) => {
         if (!albumTrack) {
             return res.status(404).json({ message: "Album Tracks not found" });
         }
-        res.json({ status: "Success", Tracks: albumTrack })
+        res.json({ status: "Success", tracks: albumTrack })
     } catch (err) {
         res.json({
             status: "failed",
