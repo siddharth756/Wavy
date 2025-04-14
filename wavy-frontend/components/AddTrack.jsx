@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { createTrack } from '../features/album/albumSlice'
+import { createTrack } from '../features/musicSlice'
 
 function AddTrack({ allItems }) {
 

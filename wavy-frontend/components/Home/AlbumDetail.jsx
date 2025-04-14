@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAlbumById, fetchTrackByTrackId, fetchTracksByAlbumId, clearSelectedItem } from '../../features/album/albumSlice'
+import { fetchAlbumById, fetchTrackByTrackId, fetchTracksByAlbumId, clearSelectedItem } from '../../features/musicSlice'
 import { useParams } from 'react-router-dom'
 import Track from './Track'
 import Player from './Player'
@@ -10,15 +10,12 @@ import { useNavigate } from 'react-router-dom';
 
 function AlbumDetail() {
   const { id } = useParams()
-  console.log(id)
   const dispatch = useDispatch()
 
   useEffect(() => {
     if (id) {
       dispatch(fetchAlbumById(id))
-      console.log("done")
       dispatch(fetchTracksByAlbumId(id))
-      console.log("done2")
       dispatch(clearSelectedItem())
     }
   }, [id, dispatch])
@@ -42,7 +39,6 @@ function AlbumDetail() {
   const tracks = useSelector((state) => state.albums.albumTracks)
   const selectedTrack = useSelector((state) => state.albums.selectedTrack)
 
-  console.log("============== ", tracks)
   return (
     <>
       {album && tracks && (

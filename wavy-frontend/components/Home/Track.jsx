@@ -17,7 +17,7 @@ function Track({ album, tracks, onSelectTrack }) {
                 className="md:p-4 px-2 py-2 rounded-2xl bg-gradient-to-r from-purple-700 to-indigo-900 cursor-pointer text-white flex items-center gap-4 hover:scale-[1.02] transition-all text-[12px]"
               >
                 <img
-                  src={`http://localhost:5000${track.trackImage || '../../src/assets/track.png'}`}
+                  src={`${track.trackImage || '../../src/assets/track.png'}`}
                   alt={track.artist}
                   className="md:w-16 md:h-16 h-10 object-cover rounded-md"
                 />

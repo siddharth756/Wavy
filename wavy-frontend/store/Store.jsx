@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import albumReducers from '../features/album/albumSlice'
+import musicSlice from '../features/musicSlice'
 
 const store =  configureStore({
     reducer: {
-        albums: albumReducers
+        albums: musicSlice
     }
 })
 

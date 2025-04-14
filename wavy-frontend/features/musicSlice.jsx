@@ -10,18 +10,15 @@ export const fetchAlbums = createAsyncThunk('albums/fetchAlbums', async () => {
 
 export const fetchAlbumById = createAsyncThunk('albums/fetchAlbumById', async (id) => {
     const res = await axios.get(`${API_URL}/api/albums/${id}`);
-    console.log("Albums : ",res.data)
     return res.data.album;
 })
 export const fetchTracksByAlbumId = createAsyncThunk('albums/fetchTracksByAlbumId', async (id) => {
     const res = await axios.get(`${API_URL}/api/albums/${id}/tracks`);
-    console.log("AlbumById",res.data)
     return res.data.tracks;
 })
 
 export const fetchTrackByTrackId = createAsyncThunk('albums/fetchTrackByTrackId', async (id) => {
     const res = await axios.get(`${API_URL}/api/tracks/${id}`)
-    console.log("TracksByAlbumId",res.data)
     return res.data.track;
 })
 
@@ -50,7 +47,7 @@ const initialState = {
     selectedTrack: null,
 }
 
-const albumSlice = createSlice({
+const musicSlice = createSlice({
     name: 'albums',
     initialState,
     reducers: {
@@ -89,5 +86,5 @@ const albumSlice = createSlice({
     }
 });
 
-export const { clearSelectedItem, clearSelectedTrack } = albumSlice.actions;
-export default albumSlice.reducer;
+export const { clearSelectedItem, clearSelectedTrack } = musicSlice.actions;
+export default musicSlice.reducer;

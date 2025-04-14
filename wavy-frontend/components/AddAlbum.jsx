@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { createAlbum } from '../features/album/albumSlice'
+import { createAlbum } from '../features/musicSlice'
 
 
 function AddAlbum() {
