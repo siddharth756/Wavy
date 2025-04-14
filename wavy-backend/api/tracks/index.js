@@ -7,11 +7,14 @@ const express = require('express');
 const app = express()
 
 app.use((req, res, next) => {
-  const allowedOrigins = [process.env.ALLOWED_ORIGIN_URL1,process.env.ALLOWED_ORIGIN_URL2];
+  const allowedOrigins = [process.env.ALLOWED_ORIGIN_URL1, process.env.ALLOWED_ORIGIN_URL2];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
+    console.log(`CORS allowed for origin: ${origin}`);
     res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    console.log(`CORS blocked for origin: ${origin}`);
   }
 
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -24,6 +27,7 @@ app.use((req, res, next) => {
 
   next();
 });
+
 
 app.use(async (req,res, next) => {
   await connectDB()
