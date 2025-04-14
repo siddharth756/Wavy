@@ -5,7 +5,6 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export const fetchAlbums = createAsyncThunk('albums/fetchAlbums', async () => {
     const res = await axios.get(`${API_URL}/api/albums`)
-    console.log("hello",res.data)
     return res.data.albums;
 })
 

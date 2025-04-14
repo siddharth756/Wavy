@@ -25,7 +25,7 @@ function Track({ album, tracks, onSelectTrack }) {
                   <p className="md:text-lg font-bold">{track.title}</p>
                   <p className="text-sm text-[8px] md:text-[12px]">{track.artist}</p>
                 </div>
-                <p className="font-semibold lg:pr-6">{track.duration}</p>
+                {/* <p className="font-semibold lg:pr-6">{track.duration}</p> */}
               </div>
             ))}
           </div>
