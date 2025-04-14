@@ -1,9 +1,15 @@
 const connectDB = require('../../utils/connectDB')
+const cors = require('cors');
 const { getTrackById, postTrack  } = require('../../controller/trackController')
 const { upload } = require('../../middleware/multer')
 const express = require('express');
 
 const app = express()
+
+app.use(cors({
+  origin: process.env.CROSS_ORIGIN_URL
+}));
+
 
 app.use(async (req,res, next) => {
   await connectDB()

@@ -60,3 +60,7 @@ debug.log
 
 wavy-backend/.env
 wavy-backend/node_modules
+
+wavy-frontend/.env 
+wavy-frontend/node_modules
+wavy-frontend/dist
