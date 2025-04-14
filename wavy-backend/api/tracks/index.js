@@ -1,18 +1,29 @@
 const connectDB = require('../../utils/connectDB')
-const cors = require('cors');
+// const cors = require('cors');
 const { getTrackById, postTrack  } = require('../../controller/trackController')
 const { upload } = require('../../middleware/multer')
 const express = require('express');
 
 const app = express()
 
-app.use(cors({
-  origin: process.env.CROSS_ORIGIN_URL,
-  methods: ['GET', 'POST','OPTIONS'],
-  allowedHeaders: ['Content-Type'],
-}));
-app.use(express.json()); 
-app.options('*', cors());
+app.use((req, res, next) => {
+  const allowedOrigins = ['http://localhost:5173', 'https://wavy-three.vercel.app'];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+  next();
+});
 
 app.use(async (req,res, next) => {
   await connectDB()
