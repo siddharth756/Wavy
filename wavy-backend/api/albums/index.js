@@ -8,7 +8,7 @@ const app = express()
 
 app.use(cors({
   origin: process.env.CROSS_ORIGIN_URL,
-  methods: ['GET', 'POST'],
+  methods: ['GET', 'POST','OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
 app.use(express.json()); 
