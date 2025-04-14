@@ -10,6 +10,7 @@ app.use(async (req,res, next) => {
   next()
 })
 
+app.get("/",)
 app.get("/api/albums", getAlbums)
 app.get("/api/albums/:id", getAlbumById)
 app.get("/api/albums/:id/tracks", getTracksByAlbumId)
