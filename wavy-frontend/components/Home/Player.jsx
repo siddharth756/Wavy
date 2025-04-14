@@ -153,7 +153,7 @@ function Player({ selectedTrack, tracks }) {
 
                         <div className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 mt-2">
                             <img
-                                src={'../../src/assets/track.png'}
+                                src={'https://github.com/siddharth756/Wavy/blob/main/wavy-frontend/src/assets/track.png'}
                                 alt="Track Cover"
                                 className="w-full h-full object-cover spin-infinite"
                             />
