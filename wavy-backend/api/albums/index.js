@@ -11,7 +11,8 @@ app.use(cors({
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type'],
 }));
-app.use(express.json()); // for JSON body
+app.use(express.json()); 
+app.options('*', cors());
 
 app.use(async (req,res, next) => {
   await connectDB()
