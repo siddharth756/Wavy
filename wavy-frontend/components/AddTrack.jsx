@@ -60,7 +60,7 @@ function AddTrack({ allItems }) {
   }
 
   return (
-    <div className="flex items-center justify-center pb-10 h-[calc(100dvh-10rem)] px-4">
+    <div className="flex items-center justify-center pb-10 px-4 mt-10">
       <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/10 to-purple-900/10 text-white rounded-xl shadow-lg p-8 w-full max-w-md space-y-6 lg:w-[900px] xl:w-[1200px]" onSubmit={handlesubmit}>
         <h2 className="text-3xl font-bold text-center mb-6">Add Track</h2>
 
