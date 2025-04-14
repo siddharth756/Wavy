@@ -7,7 +7,7 @@ const express = require('express');
 const app = express()
 
 app.use((req, res, next) => {
-  const allowedOrigins = ['http://localhost:5173', 'https://wavy-three.vercel.app'];
+  const allowedOrigins = [process.env.ALLOWED_ORIGIN_URL];
   const origin = req.headers.origin;
 
   if (allowedOrigins.includes(origin)) {
