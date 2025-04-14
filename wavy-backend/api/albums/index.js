@@ -14,6 +14,17 @@ app.use(cors({
 app.use(express.json()); 
 app.options('*', cors());
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:5173'); // or '*'
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // Respond to preflight
+  }
+  next();
+});
+
+
 app.use(async (req,res, next) => {
   await connectDB()
   next()
