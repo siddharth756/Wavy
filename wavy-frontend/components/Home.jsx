@@ -2,20 +2,24 @@ import React from 'react'
 import Album from '../components/Home/Album'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchAlbums } from '../features/musicSlice'
+import { fetchAlbums, fetchTracks } from '../features/musicSlice'
 
 function Home() {
     const dispatch = useDispatch()
+    const { allAlbums, hasFetchedAlbums, allTracks, hasFetchedTracks } = useSelector((state) => state.albums)
 
     useEffect(() => {
-        dispatch(fetchAlbums())
-    }, [dispatch]);
-
-    const { allItems } = useSelector((state) => state.albums)
+        if (!allAlbums && !hasFetchedAlbums) {
+            dispatch(fetchAlbums())
+        }
+        if (!allTracks && !hasFetchedTracks) {
+            dispatch(fetchTracks())
+        }
+    }, [allAlbums, hasFetchedAlbums, allTracks, hasFetchedTracks, dispatch]);
 
     return (
         <>
-            <Album allItems={allItems} />
+            <Album allAlbums={allAlbums} />
         </>
     )
 }

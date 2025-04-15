@@ -1,5 +1,4 @@
 const { Album } = require("../models/album")
-const { Track } = require("../models/track")
 
 exports.getAlbums = async (req, res) => {
     const albums = await Album.find()
@@ -38,36 +37,4 @@ exports.postAlbum = async (req, res) => {
                 message: err.message
             })
         }
-}
-
-
-exports.getAlbumById = async (req, res) => {
-    try {
-        const album = await Album.findById(req.params.id);
-        if (!album) {
-            return res.status(404).json({ message: "Album not found" });
-        }
-        res.json({ status: "Success", album })
-    } catch (err) {
-        res.json({
-            status: "failed",
-            message: err.message
-        })
-    }
-}
-
-
-exports.getTracksByAlbumId = async (req, res) => {
-    try {
-        const albumTrack = await Track.find({ albumId: req.params.id });
-        if (!albumTrack) {
-            return res.status(404).json({ message: "Album Tracks not found" });
-        }
-        res.json({ status: "Success", tracks: albumTrack })
-    } catch (err) {
-        res.json({
-            status: "failed",
-            message: err.message
-        })
-    }
 }

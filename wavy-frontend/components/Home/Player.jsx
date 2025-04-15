@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearSelectedTrack } from '../../features/musicSlice';
+import music from "../../src/assets/track.png"
 
 function Player({ selectedTrack, tracks }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -9,7 +8,6 @@ function Player({ selectedTrack, tracks }) {
     // const [currentTime, setCurrentTime] = useState(0);
     // const [duration, setDuration] = useState(0);
     // const progressRef = useRef(null);
-
 
     useEffect(() => {
         if (selectedTrack && tracks) {
@@ -134,12 +132,6 @@ function Player({ selectedTrack, tracks }) {
     //     }
     // }, [currentIndex, duration]);
 
-    const dispatch = useDispatch()
-
-    function handleClose() {
-        dispatch(clearSelectedTrack())
-    }
-
     return (
         <div className='py-4 mt-4'>
             <div className='flex justify-center sm:px-6'>
@@ -153,7 +145,7 @@ function Player({ selectedTrack, tracks }) {
 
                         <div className="w-36 h-36 sm:w-40 sm:h-40 md:w-44 md:h-44 rounded-full overflow-hidden border-4 border-white shadow-lg mb-4 mt-2">
                             <img
-                                src={'https://raw.githubusercontent.com/siddharth756/Wavy/main/wavy-frontend/src/assets/track.png'}
+                                src={music}
                                 alt="Track Cover"
                                 className="w-full h-full object-cover spin-infinite"
                             />
@@ -196,15 +188,6 @@ function Player({ selectedTrack, tracks }) {
                     </div>
                 </div>
             </div>
-
-
-            <button
-                type="button"
-                className="lg:w-auto block text-[12px] mx-auto my-5 py-2 mt-6 px-10 text-sm rounded-full bg-gradient-to-r from-blue-800 to-indigo-900 text-white cursor-pointer font-semibold shadow-md transition-all hover:from-blue-600 hover:to-indigo-700"
-                onClick={handleClose}
-            >
-                Close Player
-            </button>
 
         </div>
     );

@@ -1,5 +1,13 @@
 const { Track } = require('../models/track')
 
+exports.getTrack = async (req, res) => {
+    const tracks = await Track.find()
+    res.json({
+        status: 'success',
+        tracks
+    })
+}
+
 exports.postTrack = async (req, res) => {
     try {
         const { albumId } = req.body;
@@ -39,21 +47,6 @@ exports.postTrack = async (req, res) => {
         res.json({
             status: "failed",
             message: err.message
-        })
-    }
-}
-
-exports.getTrackById = async (req, res) => {
-    try {
-        const track = await Track.findById(req.params.id);
-        if (!track) {
-            return res.status(404).json({ message: "Track not found" });
-        }
-        res.json({ status: "Success", track: track })
-    } catch (err) {
-        res.json({
-            status: "failed",
-            message: err
         })
     }
 }

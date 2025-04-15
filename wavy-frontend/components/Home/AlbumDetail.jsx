@@ -1,31 +1,29 @@
 import React from 'react'
-import { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { fetchAlbumById, fetchTrackByTrackId, fetchTracksByAlbumId, clearSelectedItem } from '../../features/musicSlice'
-import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { useParams, useNavigate } from 'react-router-dom'
+import { useState } from 'react'
 import Track from './Track'
 import Player from './Player'
-import { useNavigate } from 'react-router-dom';
-
+import Loader from '../loader'
+import useAlbumWithTracks from '../../helper/useAlbumWithTracks'
 
 function AlbumDetail() {
-  const { id } = useParams()
-  const dispatch = useDispatch()
+  const [selectedTrack, setselectedTrack] = useState(null)
+  const { id } = useParams();
+  const { album, tracks } = useAlbumWithTracks(id);
+  const { albumLoading, trackLoading } = useSelector((state) => state.albums)
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchAlbumById(id))
-      dispatch(fetchTracksByAlbumId(id))
-      dispatch(clearSelectedItem())
-    }
-  }, [id, dispatch])
-  
+  const getTrackById = (tracks, id) => {
+    if (!tracks || tracks.length === 0) return null;
+    return tracks.find(track => track._id === id);
+  };
+
   const handleSelectTrack = (id) => {
-    dispatch(fetchTrackByTrackId(id))
+    let track = getTrackById(tracks, id)
+    setselectedTrack(track)
   }
-  
-  const navigate = useNavigate()
 
+  const navigate = useNavigate()
   const handleBack = () => {
     if (window.history.length > 1) {
       navigate(-1);
@@ -34,18 +32,14 @@ function AlbumDetail() {
     }
   };
 
-
-  const album = useSelector((state) => state.albums.selectedItem)
-  const tracks = useSelector((state) => state.albums.albumTracks)
-  const selectedTrack = useSelector((state) => state.albums.selectedTrack)
-
   return (
     <>
-      {album && tracks && (
-        <div className="mt-3 grid grid-cols-1 xl:grid-cols-2">
-          {/* First Column: Album Info & Player */}
-          <div className='flex px-4 flex-col mt-5'>
-            {/* Album Info */}
+      <div className="mt-3 grid grid-cols-1 xl:grid-cols-2">
+        {/* First Column: Album Info & Player */}
+        <div className='flex px-4 flex-col mt-5'>
+          {/* Album Info */}
+          {!albumLoading && album ?
+          
             <div className="flex flex-col justify-around px-4 md:flex-row items-center md:items-start text-white pt-8 pb-4 rounded-lg max-w-4xl mx-auto">
               {/* Album Image */}
               <div className="w-40 h-40 md:w-48 md:h-48 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
@@ -73,19 +67,22 @@ function AlbumDetail() {
                 </button>
               </div>
             </div>
+            : <Loader />}
 
-            {/* Player */}
-            {selectedTrack && (
-              <Player tracks={tracks} selectedTrack={selectedTrack} />
-            )}
-          </div>
 
-          {/* Second Column: Track List */}
-          <div className="p-4">
-            <Track album={album} tracks={tracks} onSelectTrack={handleSelectTrack} />
-          </div>
+
+          {selectedTrack && (
+            <Player tracks={tracks} selectedTrack={selectedTrack} />
+          )}
         </div>
-      )}
+
+        {
+          !trackLoading && tracks ? 
+            <div className="p-4">
+              <Track tracks={tracks} onSelectTrack={handleSelectTrack} />
+            </div> : <Loader />
+        }
+      </div>
 
     </>
   );
