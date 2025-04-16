@@ -3,6 +3,8 @@ const { getAlbums, postAlbum } = require('../../controller/albumController')
 // const { upload } = require('../../middleware/multer')
 const express = require('express');
 // const cors = require('cors');
+const multer = require('multer');
+const upload = multer();
 
 const app = express()
 
@@ -37,7 +39,7 @@ app.use(async (req,res, next) => {
 app.get("/",)
 app.get("/api/albums", getAlbums)
 
-app.post("/api/albums", postAlbum)
+app.post("/api/albums", upload.none(), postAlbum)
 // app.post("/api/albums", upload.single('albumImage'), postAlbum)
 
 module.exports = app

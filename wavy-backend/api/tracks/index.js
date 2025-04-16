@@ -2,6 +2,9 @@ const connectDB = require('../../utils/connectDB')
 // const cors = require('cors');
 const { getTrack, postTrack  } = require('../../controller/trackController')
 // const { upload } = require('../../middleware/multer')
+const multer = require('multer');
+const upload = multer();
+
 const express = require('express');
 
 const app = express()
@@ -35,7 +38,7 @@ app.use(async (req,res, next) => {
 })
 
 app.get("/api/tracks", getTrack)
-app.post("/api/tracks", postTrack)
+app.post("/api/tracks", upload.none(), postTrack)
 // app.post("/api/tracks", upload.fields([
 //     { name: 'trackImage', maxCount: 1 },
 //     { name: 'audio', maxCount: 1 }
