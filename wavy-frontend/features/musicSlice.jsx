@@ -5,12 +5,10 @@ const API_URL = import.meta.env.VITE_API_URL
 
 export const fetchAlbums = createAsyncThunk('albums/fetchAlbums', async () => {
     const res = await axios.get(`${API_URL}/api/albums`)
-    console.log("Albums: ", res.data)
     return res.data.albums;
 })
 export const fetchTracks = createAsyncThunk('albums/fetchTracks', async () => {
     const res = await axios.get(`${API_URL}/api/tracks`)
-    console.log("Tracks : ", res.data)
     return res.data.tracks;
 })
 
@@ -18,7 +16,6 @@ export const fetchTracks = createAsyncThunk('albums/fetchTracks', async () => {
 export const createAlbum = createAsyncThunk('albums/createAlbum', async (formData) => {
     try {
         const res = await axios.post(`${API_URL}/api/albums`, formData)
-        console.log("created album")
         return res.data
     } catch (error) {
         console.log(error)
@@ -27,7 +24,6 @@ export const createAlbum = createAsyncThunk('albums/createAlbum', async (formDat
 export const createTrack = createAsyncThunk('albums/createTrack', async (formData) => {
     try {
         const res = await axios.post(`${API_URL}/api/tracks`, formData)
-        console.log("created track")
         return res.data
     } catch (error) {
         console.log(error)
@@ -44,12 +40,22 @@ const initialState = {
     trackLoading: false,
     detailLoading: false,
     error: null,
-    loading: false
+    loading: false,
+    selectedTrack: null,
+    selectedAllTrack: []
 }
 
 const musicSlice = createSlice({
     name: 'albums',
     initialState,
+    reducers: {
+        setTrack: (state, action) => {
+            state.selectedTrack = action.payload
+        },
+        setAllTrack: (state, action) => {
+            state.selectedAllTrack = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
             // Albums
@@ -58,7 +64,6 @@ const musicSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchAlbums.fulfilled, (state, action) => {
-                console.log("payload : ", action.payload)
                 state.albumLoading = false;
                 state.allAlbums = action.payload;
                 state.hasFetchedAlbums = true;
@@ -76,7 +81,6 @@ const musicSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchTracks.fulfilled, (state, action) => {
-                console.log("payload : ", action.payload)
                 state.trackLoading = false;
                 state.allTracks = action.payload;
                 state.hasFetchedTracks = true;
@@ -125,4 +129,5 @@ const musicSlice = createSlice({
     }
 });
 
+export const { setTrack,setAllTrack } = musicSlice.actions
 export default musicSlice.reducer;

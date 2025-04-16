@@ -10,6 +10,7 @@ import Player from '../components/Home/Player'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAlbums, fetchTracks } from '../features/musicSlice'
+import { playTrack } from '../features/musicPlayerSlice'
 
 
 function App() {
@@ -17,31 +18,47 @@ function App() {
   const dispatch = useDispatch()
   const { hasFetchedAlbums, hasFetchedTracks } = useSelector((state) => state.albums)
 
-    useEffect(() => {
-      if (!hasFetchedAlbums) {
-          dispatch(fetchAlbums());
-      }
+  useEffect(() => {
+    if (!hasFetchedAlbums) {
+      dispatch(fetchAlbums());
+    }
   }, [hasFetchedAlbums, dispatch]);
 
   useEffect(() => {
-      if (hasFetchedAlbums && !hasFetchedTracks) {
-          dispatch(fetchTracks());
-      }
+    if (hasFetchedAlbums && !hasFetchedTracks) {
+      dispatch(fetchTracks());
+    }
   }, [hasFetchedAlbums, hasFetchedTracks, dispatch]);
+
+  const selectedTrack = useSelector(state => state.albums.selectedTrack)
+  const tracks = useSelector(state => state.albums.selectedAllTrack)
 
   return (
     <>
       <BrowserRouter>
-        <Navbar />
-        {/* <Player /> */}
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path='/albums/:id' element={<AlbumDetail />}></Route>
-          <Route path="/album" element={<AddAlbum />}></Route>
-          <Route path="/track" element={<AddTrack />}></Route>
-          <Route path="*" element={<NoPage />}></Route>
-        </Routes>
-      </BrowserRouter >
+        <div className="flex flex-col md:flex-row text-white">
+          {/* Left Navbar */}
+          <div>
+            <Navbar />
+          </div>
+
+          {/* Right: Main Content */}
+          <div className="flex-1 overflow-y-auto">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/albums/:id" element={<AlbumDetail />} />
+              <Route path="/album" element={<AddAlbum />} />
+              <Route path="/track" element={<AddTrack />} />
+              <Route path="*" element={<NoPage />} />
+            </Routes>
+          </div>
+        </div>
+
+
+        {selectedTrack && tracks && (
+            <Player tracks={tracks} selectedTrack={selectedTrack} clearTrack={() => dispatch(playTrack(null))}/>
+        )}
+      </BrowserRouter>
     </>
   )
 }

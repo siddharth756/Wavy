@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { createAlbum } from '../features/musicSlice'
 import axios from 'axios'
 
@@ -9,41 +9,37 @@ function AddAlbum() {
   const [albumImage, setalbumImage] = useState(null)
   const [description, setdescription] = useState('')
   const [successMessage, setSuccessMessage] = useState("");
-
-  const loading = useSelector((state) => state.albums.loading)
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-
+    setIsLoading(true)
     const cloudName = import.meta.env.VITE_CLOUD_NAME;
     const cloudUploadPreset = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
     const albumUploadPreset = import.meta.env.VITE_CLOUD_ALBUMIMAGE_PRESET;
 
-    // 🔹 Upload image
-    const imageData = new FormData();
-    imageData.append('file', albumImage);
-    imageData.append("folder", albumUploadPreset);
-    imageData.append("upload_preset", cloudUploadPreset);
-    const imageRes = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      imageData
-    );
-    const albumImageUrl = imageRes.data.secure_url;
-
-    console.log("done")
-
-    const formData = new FormData();
-    formData.append("artist", artist);
-    formData.append("albumImage", albumImageUrl);
-    formData.append("description", description);
-
 
     try {
+      // 🔹 Upload image
+      const imageData = new FormData();
+      imageData.append('file', albumImage);
+      imageData.append("folder", albumUploadPreset);
+      imageData.append("upload_preset", cloudUploadPreset);
+      const imageRes = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        imageData
+      );
+      const albumImageUrl = imageRes.data.secure_url;
+
+      const formData = new FormData();
+      formData.append("artist", artist);
+      formData.append("albumImage", albumImageUrl);
+      formData.append("description", description);
+
       let response = await dispatch(createAlbum(formData)).unwrap();
-      console.log("dispatched")
       if (response.status === "success") {
         setSuccessMessage("Album added successfully!");
 
@@ -53,24 +49,20 @@ function AddAlbum() {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
+      setartist('')
+      setalbumImage(null)
+      setdescription('')
     }
-    setartist('')
-    setalbumImage(null)
-    setdescription('')
   };
 
 
   return (
-    <div className="flex items-center justify-center pb-10 px-4 mt-10">
-      <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/10 to-purple-900/10 text-white rounded-xl shadow-lg p-8 w-full max-w-fit space-y-6"
+    <div className="flex items-center md:min-h-screen justify-center pb-10 px-4 pt-5">
+      <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/5 to-purple-500/2 text-white rounded-xl shadow-lg p-8 w-full max-w-fit space-y-6"
         onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold text-center mb-4">Add Album</h2>
-
-        {loading &&
-          <p className="text-white-400 mt-5 text-md text-center animate-pulse">
-            Processing...
-          </p>
-        }
 
         {successMessage &&
           <p className="text-green-400 mt-5 text-md text-center animate-pulse">
@@ -122,11 +114,14 @@ function AddAlbum() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full md:px-14 py-2 px-4 rounded-full bg-gradient-to-r from-blue-700 to-indigo-900  text-white shadow-md hover:from-blue-600 hover:to-indigo-700 transition-all"
+          disabled={isLoading}
+          className={`w-full py-3 rounded-full text-white text-lg font-semibold transition-all shadow-md ${isLoading
+              ? 'bg-gray-500 cursor-not-allowed'
+              : 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
+            }`}
         >
-          Add Album
+          {isLoading ? "Uploading..." : "Add Album"}
         </button>
-
       </form>
     </div>
   )

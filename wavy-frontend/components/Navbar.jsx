@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from "../src/assets/Wavy-logo.png"
 import { useState } from 'react';
 import { NavLink } from "react-router-dom";
 
@@ -7,125 +6,112 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     return (
         <>
-            <nav className="mt-6 w-full px-8 py-3">
-                <div className="flex items-center justify-between lg:px-18">
-                    {/* Logo and Title */}
-                    <NavLink to="/">
-                        <div className="flex flex-col items-center">
-                            <img
-                                src={logo}
-                                className="h-10 ml-2 md:ml-4 md:h-12 filter brightness-0 invert"
-                                alt="Logo"
-                            />
-                            <span className="text-xl md:text-4xl wavy text-white">
-                                Wavy
-                            </span>
-                        </div>
+            <nav className="flex flex-col md:flex-row shadow-[inset_0_10px_20px_-10px_rgba(0,0,0,0.7)] bg-neutral-800">
+                {/* Sidebar for desktop */}
+                <div className="hidden md:flex flex-col rounded-lg text-white xl:w-88 w-48 min-h-screen p-6 space-y-6">
+                    <NavLink to="/" className="text-2xl font-bold mb-6">
+                        Wavy
                     </NavLink>
 
-                    {/* Hamburger Toggle Button */}
-                    <div className="md:hidden text-white transition-all">
-                        <button onClick={() => setMenuOpen(!menuOpen)}>
-                            {
-                                menuOpen ? <i className='fa fa-close text-2xl cursor-pointer'></i> : <i className='fa fa-bars text-2xl cursor-pointer'></i>
-                            }
-                        </button>
-                    </div>
+                    <NavLink to="/" end>
+                        {({ isActive }) => (
+                            <button
+                                className={`py-2 px-4 w-full text-center rounded-md transition-all ${isActive
+                                    ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                    : 'hover:bg-neutral-700'
+                                    }`}
+                            >
+                                Home
+                            </button>
+                        )}
+                    </NavLink>
 
-                    {/* Navigation Links (desktop) */}
-                    <div className="hidden md:flex space-x-6 items-center wavy-links tracking-wider">
-                        <NavLink to="/" end>
-                            {({ isActive }) => (
-                                <button
-                                    type="button"
-                                    className={`w-full md:px-14 py-2 px-4 rounded-full text-white shadow-md cursor-pointer transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600'
-                                        }`}
-                                >
-                                    Home
-                                </button>
-                            )}
-                        </NavLink>
-                        <NavLink to="/album" >
-                            {({ isActive }) => (
-                                <button
-                                    type="button"
-                                    className={`w-full cursor-pointer relative md:px-14 py-2 px-4 rounded-full text-white shadow-md transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600'
-                                        }`}
-                                >
-                                    <i className='fa fa-plus absolute left-4 top-3'></i>
+                    <NavLink to="/album">
+                        {({ isActive }) => (
+                            <button
+                                className={`py-2 px-4 w-full text-center rounded-md transition-all ${isActive
+                                    ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                    : 'hover:bg-neutral-700'
+                                    }`}
+                            >
+                                <span>
+                                    <i className="fa fa-plus mr-2" />
                                     Album
-                                </button>
-                            )}
-                        </NavLink>
-                        <NavLink to="/track">
-                            {({ isActive }) => (
-                                <button
-                                    type="button"
-                                    className={`w-full cursor-pointer relative md:px-14 py-2 px-4 rounded-full text-white shadow-md transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600'
-                                        }`}
-                                >
-                                    <i className='fa fa-plus absolute left-4 top-3'></i>
+                                </span>
+                            </button>
+                        )}
+                    </NavLink>
+
+                    <NavLink to="/track">
+                        {({ isActive }) => (
+                            <button
+                                className={`py-2 px-4 rounded-md w-full text-center transition-all ${isActive
+                                    ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                    : 'hover:bg-neutral-700'
+                                    }`}
+                            >
+                                <span>
+                                    <i className="fa fa-plus mr-2" />
                                     Track
-                                </button>
-                            )}
-                        </NavLink>
-                    </div>
+                                </span>
+                            </button>
+                        )}
+                    </NavLink>
                 </div>
 
-                {/* Navigation Links (mobile dropdown) */}
+                {/* Mobile Navbar */}
+                <div className="w-full md:hidden px-4 py-3 flex justify-between items-center  bg-gradient-to-l from-neutral-800">
+                    <NavLink to="/" className="text-white text-xl font-bold">
+                        Wavy
+                    </NavLink>
+
+                    <button onClick={() => setMenuOpen(!menuOpen)} className="text-white text-2xl">
+                        {menuOpen ? <i className="fa fa-close" /> : <i className="fa fa-bars" />}
+                    </button>
+                </div>
+
+                {/* Dropdown menu for mobile */}
                 {menuOpen && (
-                    <div className="flex w-full wavy-links cursor-pointer flex-col space-y-4 md:hidden items-center mt-10 tracking-wider">
-                        <NavLink to="/" end className="w-full">
+                    <div className="md:hidden text-white w-full flex flex-col items-center space-y-4 py-4">
+                        <NavLink to="/" end className="w-4/5">
                             {({ isActive }) => (
                                 <button
-                                    type="button"
-                                    className={`w-full py-2 px-4 rounded-full text-white shadow-md cursor-pointer transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-700'
+                                    className={`w-full py-2 rounded-md transition-all ${isActive
+                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                        : 'hover:bg-neutral-700'
                                         }`}
                                 >
                                     Home
                                 </button>
                             )}
                         </NavLink>
-
-                        <NavLink to="/album" className="w-full">
+                        <NavLink to="/album" className="w-4/5">
                             {({ isActive }) => (
                                 <button
-                                    type="button"
-                                    className={`w-full py-2 cursor-pointer px-4 rounded-full text-white shadow-md transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-700'
+                                    className={`w-full py-2 rounded-md transition-all ${isActive
+                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                        : 'hover:bg-neutral-700'
                                         }`}
                                 >
                                     Add Album
                                 </button>
                             )}
                         </NavLink>
-
-                        <NavLink to="/track" className="w-full">
+                        <NavLink to="/track" className="w-4/5">
                             {({ isActive }) => (
                                 <button
-                                    type="button"
-                                    className={`w-full py-2 cursor-pointer px-4 rounded-full text-white shadow-md transition-all ${isActive
-                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
-                                        : 'bg-gradient-to-r from-gray-700 to-gray-900 hover:from-gray-600 hover:to-gray-700'
+                                    className={`w-full py-2 rounded-md transition-all ${isActive
+                                        ? 'bg-gradient-to-r from-blue-700 to-indigo-900'
+                                        : 'hover:bg-neutral-700'
                                         }`}
                                 >
                                     Add Track
                                 </button>
                             )}
                         </NavLink>
-
                     </div>
                 )}
-            </nav >
+            </nav>
         </>
     )
 }

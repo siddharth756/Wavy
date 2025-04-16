@@ -8,8 +8,6 @@ import axios from 'axios'
 function AddTrack() {
 
   const allAlbums = useSelector(state => state.albums.allAlbums)
-  const loading = useSelector(state => state.albums.loading)
-
   const [albumName, setalbumName] = useState('')
   const [title, settitle] = useState('')
   const [artist, setartist] = useState('')
@@ -17,6 +15,7 @@ function AddTrack() {
   const [audio, setaudio] = useState(null)
   const [albumId, setalbumId] = useState(null)
   const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch()
 
@@ -34,49 +33,46 @@ function AddTrack() {
       alert('Invalid album name.');
       return;
     }
-
+    setIsLoading(true);
 
     const cloudName = import.meta.env.VITE_CLOUD_NAME;
     const cloudUploadPreset = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
     const audioUploadPreset = import.meta.env.VITE_CLOUD_AUDIO_PRESET;
     const trackUploadPreset = import.meta.env.VITE_CLOUD_TRACKIMAGE_PRESET;
 
-    console.log('start')
+    try {
+      // 🔹 Upload audio
+      const audioData = new FormData()
+      audioData.append('file', audio);
+      audioData.append("folder", audioUploadPreset);
+      audioData.append("upload_preset", cloudUploadPreset);
 
-    // 🔹 Upload audio
-    const audioData = new FormData()
-    audioData.append('file', audio);
-    audioData.append("folder", audioUploadPreset);
-    audioData.append("upload_preset", cloudUploadPreset); 
-
-    const audioRes = await axios.post(
-      `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`,
-      audioData
-    );
-    const audioUrl = audioRes.data.secure_url;
+      const audioRes = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`,
+        audioData
+      );
+      const audioUrl = audioRes.data.secure_url;
 
 
-    // 🔹 Upload image
-    const imageData = new FormData();
-    imageData.append('file', trackImage);
-    imageData.append("folder", trackUploadPreset);
-    imageData.append("upload_preset", cloudUploadPreset); 
-    const imageRes = await axios.post(
+      // 🔹 Upload image
+      const imageData = new FormData();
+      imageData.append('file', trackImage);
+      imageData.append("folder", trackUploadPreset);
+      imageData.append("upload_preset", cloudUploadPreset);
+      const imageRes = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
         imageData
-    );
-    const trackImageUrl = imageRes.data.secure_url;
+      );
+      const trackImageUrl = imageRes.data.secure_url;
 
-    console.log("done")
+      const formData = new FormData();
+      formData.append("albumId", albumId);
+      formData.append("title", title);
+      formData.append("artist", artist);
+      formData.append("trackImage", trackImageUrl);
+      formData.append("audio", audioUrl);
 
-    const formData = new FormData();
-    formData.append("albumId", albumId);
-    formData.append("title", title);
-    formData.append("artist", artist);
-    formData.append("trackImage", trackImageUrl);
-    formData.append("audio", audioUrl);
 
-    try {
       let response = await dispatch(createTrack(formData)).unwrap();
 
       if (response.status === "success") {
@@ -88,27 +84,21 @@ function AddTrack() {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
+      setalbumId(null)
+      setalbumName('')
+      setartist('')
+      settitle('')
+      settrackImage(null)
+      setaudio(null)
     }
-
-    setalbumId(null)
-    setalbumName('')
-    setartist('')
-    settitle('')
-    settrackImage(null)
-    setaudio(null)
   }
 
   return (
-    <div className="flex items-center justify-center pb-10 px-4 mt-10">
-      <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/10 to-purple-900/10 text-white rounded-xl shadow-lg p-8 w-full max-w-md space-y-6 lg:w-[900px] xl:w-[1200px]" onSubmit={handlesubmit}>
+    <div className="flex items-center justify-center pb-10 px-4 md:min-h-screen pt-5">
+      <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/5 to-purple-500/2 text-white rounded-xl shadow-lg p-8 w-full max-w-md space-y-6 lg:w-[900px] xl:w-[1200px]" onSubmit={handlesubmit}>
         <h2 className="text-3xl font-bold text-center mb-6">Add Track</h2>
-
-
-        {loading &&
-          <p className="text-white-400 mt-5 text-md text-center animate-pulse">
-            Processing...
-          </p>
-        }
 
         {successMessage &&
           <p className="text-green-400 mt-5 text-md text-center animate-pulse">
@@ -189,10 +179,15 @@ function AddTrack() {
         {/* Submit */}
         <button
           type="submit"
-          className="w-full py-3 rounded-full bg-gradient-to-r from-blue-700 to-indigo-900 text-white shadow-md hover:from-blue-600 hover:to-indigo-700 transition-all text-lg font-semibold"
+          disabled={isLoading}
+          className={`w-full py-3 rounded-full text-white text-lg font-semibold transition-all shadow-md ${isLoading
+              ? 'bg-gray-500 cursor-not-allowed'
+              : 'bg-gradient-to-r from-blue-700 to-indigo-900 hover:from-blue-600 hover:to-indigo-700'
+            }`}
         >
-          Add Track
+          {isLoading ? "Uploading..." : "Add Track"}
         </button>
+
       </form>
     </div>
 

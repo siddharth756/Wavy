@@ -4,14 +4,10 @@
 @import "tailwindcss";
 
 :root {
-  --slider-start-color: #4b0082; /* Indigo */
-  --slider-end-color: #8a2be2;   /* Purple */
-  --slider-thumb-color: #8a2be2; /* Thumb color */
+  --slider-start-color: #1D4ED8; /* Indigo */
+  --slider-end-color: #312E81;   /* Purple */
+  --slider-thumb-color: #2e63f6; /* Thumb color */
   --slider-track-color: #444;    /* Background track color */
-}
-
-html {
-    background-color: white;
 }
 
 body {
@@ -20,10 +16,8 @@ body {
     box-sizing: border-box;
     min-height: 100vh;
     min-height: 100dvh;
-    border: 10px solid white;
-    border-radius: 50px;
     font-family: 'poppins';
-    background: linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(6,6,68,1) 50%, rgb(105, 15, 200) 100%);
+    background-color: rgb(23 23 23);
 }
 
 .wavy {
