@@ -4,18 +4,18 @@ import music from "../../src/assets/track.png"
 function Player({ selectedTrack, tracks }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const progressRef = useRef(null);
     const audioRef = useRef(null);
-    // const [currentTime, setCurrentTime] = useState(0);
-    // const [duration, setDuration] = useState(0);
-    // const progressRef = useRef(null);
 
     useEffect(() => {
         if (selectedTrack && tracks) {
             const index = tracks.findIndex(track => track._id === selectedTrack._id);
             if (index !== -1) {
                 setCurrentIndex(index);
+                setIsPlaying(true)
             }
-            setIsPlaying(true)
         }
     }, [selectedTrack, tracks]);
 
@@ -23,57 +23,34 @@ function Player({ selectedTrack, tracks }) {
         const audio = audioRef.current;
         if (!audio) return;
 
-        const handleCanPlay = () => {
-            if (isPlaying && audio.paused) {
-                audio.play().catch((error) => {
-                    console.error('Error playing audio:', error);
-                });
-            }
-        };
-
-        audio.addEventListener('canplay', handleCanPlay);
-
-        // audio.load(); //remove to prevent resetting the audio
-
-        return () => {
-            audio.removeEventListener('canplay', handleCanPlay);
-        };
+        if (isPlaying) {
+            audio.play().catch(err => console.log('Play Error : ', err))
+        } else {
+            audio.pause()
+        }
     }, [currentIndex, isPlaying]);
 
 
-    // const updateSliderBackground = (value, max) => {
-    //     const percentage = (value / max) * 100;
-    //     if (progressRef.current) {
-    //         progressRef.current.style.background = `linear-gradient(to right, var(--slider-start-color) 0%, var(--slider-end-color) ${percentage}%, var(--slider-track-color) ${percentage}%, var(--slider-track-color) 100%)`;
-    //     }
-    // };
+    const updateSliderBackground = (value, max) => {
+        const percentage = (value / max) * 100;
+        if (progressRef.current) {
+            progressRef.current.style.background = `linear-gradient(to right, var(--slider-start-color) 0%, var(--slider-end-color) ${percentage}%, var(--slider-track-color) ${percentage}%, var(--slider-track-color) 100%)`;
+        }
+    };
 
 
 
-    // const handleSliderChange = (e) => {
-    //     const newTime = parseFloat(e.target.value);
-    //     audioRef.current.currentTime = newTime;
-    //     setCurrentTime(newTime);
-
-    //     const percentage = (newTime / duration) * 100;
-    //     e.target.style.background = `linear-gradient(to right, #4b0082 0%, #8a2be2 ${percentage}%, #444 ${percentage}%, #444 100%)`;
-    // };
+    const handleSliderChange = (e) => {
+        const newTime = parseFloat(e.target.value);
+        audioRef.current.currentTime = newTime;
+        setCurrentTime(newTime);
+        updateSliderBackground(newTime, duration)
+    };
 
 
 
     const handlePlayPause = () => {
-        const audio = audioRef.current;
-        if (!audio) return;
-
-        if (audio.paused) {
-            audio.play().catch((error) => {
-                console.error('Error playing audio:', error);
-            });
-            setIsPlaying(true);
-        } else {
-            audio.pause();
-            setIsPlaying(false);
-        }
+        setIsPlaying(prev => !prev)
     };
 
 
@@ -95,42 +72,66 @@ function Player({ selectedTrack, tracks }) {
         setIsPlaying(true);
     };
 
+    const handleStop = () => {
+        const audio = audioRef.current;
+        if (audio) {
+            audio.pause();
+            audio.currentTime = 0;
+            setIsPlaying(false);
+            setCurrentTime(0);
+        }
+    };
+
     const currentTrack = tracks[currentIndex];
 
 
-    // useEffect(() => {
-    //     const audio = audioRef.current;
+    useEffect(() => {
+        const audio = audioRef.current;
 
-    //     const updateTime = () => {
-    //         setCurrentTime(audio.currentTime);
-    //         updateSliderBackground(audio.currentTime, audio.duration);
-    //     };
+        const updateTime = () => {
+            setCurrentTime(audio.currentTime);
+            updateSliderBackground(audio.currentTime, audio.duration);
+        };
 
-    //     const updateDuration = () => {
-    //         setDuration(audio.duration);
-    //         updateSliderBackground(audio.currentTime, audio.duration);
-    //     };
+        const updateDuration = () => {
+            setDuration(audio.duration);
+            updateSliderBackground(audio.currentTime, audio.duration);
+        };
 
-    //     if (audio) {
-    //         audio.addEventListener('timeupdate', updateTime);
-    //         audio.addEventListener('loadedmetadata', updateDuration);
-    //     }
+        const handleEnded = () => {
+            handleNext();
+        };
 
-    //     return () => {
-    //         if (audio) {
-    //             audio.removeEventListener('timeupdate', updateTime);
-    //             audio.removeEventListener('loadedmetadata', updateDuration);
-    //         }
-    //     };
-    // }, [currentTrack]);
 
-    // useEffect(() => {
-    //     if (audioRef.current) {
-    //         audioRef.current.currentTime = 0;
-    //         setCurrentTime(0);
-    //         updateSliderBackground(0, duration);
-    //     }
-    // }, [currentIndex, duration]);
+        if (audio) {
+            audio.addEventListener('timeupdate', updateTime);
+            audio.addEventListener('loadedmetadata', updateDuration);
+            audio.addEventListener('ended', handleEnded);
+        }
+
+        return () => {
+            if (audio) {
+                audio.removeEventListener('timeupdate', updateTime);
+                audio.removeEventListener('loadedmetadata', updateDuration);
+                audio.removeEventListener('ended', handleEnded);
+            }
+        };
+    }, [currentTrack, handleNext]);
+
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.currentTime = 0;
+            setCurrentTime(0);
+        }
+    }, [currentIndex]);
+
+    const formatTime = (time) => {
+        if (isNaN(time)) return "00:00";
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    };
 
     return (
         <div className='py-4 mt-4'>
@@ -159,12 +160,12 @@ function Player({ selectedTrack, tracks }) {
 
                         <audio
                             ref={audioRef}
-                            src={`${currentTrack.audio}`}
+                            src={currentTrack.audio}
                             preload="metadata"
                             loop
                             className='my-4 w-full'
                         />
-{/* 
+                        <span>{formatTime(currentTime)}</span>
                         <input
                             type="range"
                             ref={progressRef}
@@ -172,14 +173,17 @@ function Player({ selectedTrack, tracks }) {
                             value={currentTime}
                             max={duration || 0}
                             onChange={handleSliderChange}
-                        /> */}
-
+                        />
+                        <span>{formatTime(duration)}</span>
                         <div className="flex items-center justify-between gap-4 mt-4 px-2">
                             <button onClick={handlePrev} className="text-white text-lg cursor-pointer">
                                 <i className="fa fa-backward"></i>
                             </button>
                             <button onClick={handlePlayPause} className="text-white text-xl cursor-pointer">
                                 <i className={`fa ${isPlaying ? 'fa-pause' : 'fa-play'}`}></i>
+                            </button>
+                              <button onClick={handleStop} className="text-white text-lg">
+                                <i className="fa fa-stop"></i>
                             </button>
                             <button onClick={handleNext} className="text-white text-lg cursor-pointer">
                                 <i className="fa fa-forward"></i>

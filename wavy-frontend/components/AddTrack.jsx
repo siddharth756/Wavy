@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { createTrack } from '../features/musicSlice'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
 
-function AddTrack({ allItems }) {
+
+function AddTrack() {
+
+  const allAlbums = useSelector(state => state.albums.allAlbums)
+  const loading = useSelector(state => state.albums.loading)
 
   const [albumName, setalbumName] = useState('')
   const [title, settitle] = useState('')
@@ -16,10 +22,10 @@ function AddTrack({ allItems }) {
 
   useEffect(() => {
     if (albumName) {
-      const res = allItems.find((item) => item.artist.toLowerCase() === albumName.toLowerCase())
+      const res = allAlbums.find((item) => item.artist.toLowerCase() === albumName.toLowerCase())
       setalbumId(res ? res._id : null)
     };
-  }, [albumName, allItems])
+  }, [albumName, allAlbums])
 
   const handlesubmit = async (e) => {
     e.preventDefault();
@@ -29,19 +35,51 @@ function AddTrack({ allItems }) {
       return;
     }
 
-    const formData = new FormData();
 
+    const cloudName = import.meta.env.VITE_CLOUD_NAME;
+    const cloudUploadPreset = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
+    const audioUploadPreset = import.meta.env.VITE_CLOUD_AUDIO_PRESET;
+    const trackUploadPreset = import.meta.env.VITE_CLOUD_TRACKIMAGE_PRESET;
+
+
+    // 🔹 Upload audio
+    const audioData = new FormData()
+    audioData.append('file', audio);
+    audioData.append("folder", audioUploadPreset);
+    audioData.append("upload_preset", cloudUploadPreset); 
+
+    const audioRes = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`,
+      audioData
+    );
+    const audioUrl = audioRes.data.secure_url;
+
+
+    // 🔹 Upload image
+    const imageData = new FormData();
+    imageData.append('file', trackImage);
+    imageData.append("folder", trackUploadPreset);
+    imageData.append("upload_preset", cloudUploadPreset); 
+    const imageRes = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        imageData
+    );
+    const trackImageUrl = imageRes.data.secure_url;
+
+    console.log("done")
+
+    const formData = new FormData();
     formData.append("albumId", albumId);
     formData.append("title", title);
     formData.append("artist", artist);
-    formData.append("trackImage", trackImage);
-    formData.append("audio", audio);
+    formData.append("trackImage", trackImageUrl);
+    formData.append("audio", audioUrl);
 
     try {
       let response = await dispatch(createTrack(formData)).unwrap();
 
       if (response.status === "success") {
-        setSuccessMessage(`Track added to album ${albumName} successfully!`);
+        setSuccessMessage(`Track added successfully!`);
 
         setTimeout(() => {
           setSuccessMessage("");
@@ -51,12 +89,12 @@ function AddTrack({ allItems }) {
       console.log(error)
     }
 
-    albumId(null)
-    albumName('')
-    artist('')
-    title('')
-    trackImage(null)
-    audio(null)
+    setalbumId(null)
+    setalbumName('')
+    setartist('')
+    settitle('')
+    settrackImage(null)
+    setaudio(null)
   }
 
   return (
@@ -64,6 +102,12 @@ function AddTrack({ allItems }) {
       <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/10 to-purple-900/10 text-white rounded-xl shadow-lg p-8 w-full max-w-md space-y-6 lg:w-[900px] xl:w-[1200px]" onSubmit={handlesubmit}>
         <h2 className="text-3xl font-bold text-center mb-6">Add Track</h2>
 
+
+        {loading &&
+          <p className="text-white-400 mt-5 text-md text-center animate-pulse">
+            Processing...
+          </p>
+        }
 
         {successMessage &&
           <p className="text-green-400 mt-5 text-md text-center animate-pulse">

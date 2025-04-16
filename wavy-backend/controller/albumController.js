@@ -10,26 +10,21 @@ exports.getAlbums = async (req, res) => {
 
 exports.postAlbum = async (req, res) => {
         try {
-            const { artist, description } = req.body;
-            if (!artist || !description) {
-                return res.status(400).json({ message: 'Artist and description are required' });
-            }
-            let albumImage = null;
-    
-            if (req.file) {
-                albumImage = req.file.path; // cloudinary handles file upload via multer-storage-cloudinary
+            const { artist, description, albumImage } = req.body;
+            if (!artist || !albumImage) {
+                return res.status(400).json({ message: 'Album name and image are required' });
             }
     
             const newAlbum = new Album({
                 artist: artist,
-                description: description,
+                description: description || "Top Best Songs.",
                 albumImage: albumImage
             })
             await newAlbum.save()
             res.json({
                 status: "success",
                 message: "Album created successfully.",
-
+                newAlbum
             })
         } catch (err) {
             res.json({

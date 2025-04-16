@@ -34,14 +34,15 @@ export const createTrack = createAsyncThunk('albums/createTrack', async (formDat
 
 
 const initialState = {
-    allAlbums: localStorage.getItem('albums') ? JSON.parse(localStorage.getItem('albums')) : null,
-    allTracks: localStorage.getItem('tracks') ? JSON.parse(localStorage.getItem('tracks')) : null,
+    allAlbums: localStorage.getItem('albums') ? JSON.parse(localStorage.getItem('albums')) : [],
+    allTracks: localStorage.getItem('tracks') ? JSON.parse(localStorage.getItem('tracks')) : [],
     hasFetchedAlbums: !!localStorage.getItem('albums'),
     hasFetchedTracks: !!localStorage.getItem('tracks'),
     albumLoading: false,
     trackLoading: false,
     detailLoading: false,
     error: null,
+    loading: false
 }
 
 const musicSlice = createSlice({
@@ -67,38 +68,57 @@ const musicSlice = createSlice({
 
 
             // Tracks
-            .addCase(fetchAlbums.pending, (state) => {
+            .addCase(fetchTracks.pending, (state) => {
                 state.trackLoading = true;
                 state.error = null;
             })
-            .addCase(fetchAlbums.fulfilled, (state, action) => {
+            .addCase(fetchTracks.fulfilled, (state, action) => {
                 state.trackLoading = false;
                 state.allTracks = action.payload;
                 state.hasFetchedTracks = true;
                 localStorage.setItem('tracks', JSON.stringify(action.payload));
             })
-            .addCase(fetchAlbums.rejected, (state, action) => {
+            .addCase(fetchTracks.rejected, (state, action) => {
                 state.trackLoading = false;
                 state.error = action.error.message;
             })
 
             // albumCreate 
+            .addCase(createAlbum.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
             .addCase(createAlbum.fulfilled, (state, action) => {
-                const existing = state.allAlbums.find(item => item._id === action.payload._id);
-                if (!existing) {
-                    state.allAlbums.push(action.payload);
+                state.loading = false;
+                const exist = state.allAlbums.some(item => item._id === action.payload._id);
+                if (!exist) {
+                    state.allAlbums = [...state.allAlbums, action.payload.newAlbum];
+                    localStorage.setItem('albums', JSON.stringify(state.allAlbums));
                 }
+            })
+            .addCase(createAlbum.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             })
 
             // trackCreate 
+            .addCase(createTrack.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
             .addCase(createTrack.fulfilled, (state, action) => {
-                const existing = state.allTracks.find(item => item._id === action.payload._id);
-                if (!existing) {
-                    state.allTracks.push(action.payload);
+                state.loading = false;
+                const exist = state.allTracks.some(item => item._id === action.payload._id);
+                if (!exist) {
+                    state.allTracks = [...state.allTracks, action.payload.newTrack];
+                    localStorage.setItem('tracks', JSON.stringify(state.allTracks));
                 }
+            })
+            .addCase(createTrack.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
             })
     }
 });
 
-// export const { clearSelectedItem, clearSelectedTrack } = musicSlice.actions;
 export default musicSlice.reducer;

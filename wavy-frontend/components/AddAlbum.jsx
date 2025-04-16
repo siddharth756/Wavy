@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { createAlbum } from '../features/musicSlice'
-
+import axios from 'axios'
 
 function AddAlbum() {
   const [artist, setartist] = useState('')
@@ -10,15 +10,34 @@ function AddAlbum() {
   const [description, setdescription] = useState('')
   const [successMessage, setSuccessMessage] = useState("");
 
+  const loading = useSelector((state) => state.albums.loading)
+
   const dispatch = useDispatch()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
 
+    const cloudName = import.meta.env.VITE_CLOUD_NAME;
+    const cloudUploadPreset = import.meta.env.VITE_CLOUD_UPLOAD_PRESET;
+    const albumUploadPreset = import.meta.env.VITE_CLOUD_ALBUMIMAGE_PRESET;
+
+    // 🔹 Upload image
+    const imageData = new FormData();
+    imageData.append('file', albumImage);
+    imageData.append("folder", albumUploadPreset);
+    imageData.append("upload_preset", cloudUploadPreset);
+    const imageRes = await axios.post(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      imageData
+    );
+    const albumImageUrl = imageRes.data.secure_url;
+
+    console.log("done")
+
+    const formData = new FormData();
     formData.append("artist", artist);
-    formData.append("albumImage", albumImage);
+    formData.append("albumImage", albumImageUrl);
     formData.append("description", description);
 
 
@@ -46,6 +65,12 @@ function AddAlbum() {
       <form className="backdrop-blur-md shadow-black bg-gradient-to-br from-blue-500/10 to-purple-900/10 text-white rounded-xl shadow-lg p-8 w-full max-w-fit space-y-6"
         onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold text-center mb-4">Add Album</h2>
+
+        {loading &&
+          <p className="text-white-400 mt-5 text-md text-center animate-pulse">
+            Processing...
+          </p>
+        }
 
         {successMessage &&
           <p className="text-green-400 mt-5 text-md text-center animate-pulse">

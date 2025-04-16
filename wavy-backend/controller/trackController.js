@@ -10,31 +10,20 @@ exports.getTrack = async (req, res) => {
 
 exports.postTrack = async (req, res) => {
     try {
-        const { albumId } = req.body;
-        if (!albumId) {
-            return res.status(400).json({ message: 'albumId and title required.' });
-        }
-        const trackImage = req.files['trackImage']?.[0];
-        const audioFile = req.files['audio']?.[0];
-        
-        if (!audioFile) {
-            return res.status(400).json({ status: 'failed', message: 'Audio file is required.' });
-        }
-        if (!trackImage) {
-            return res.status(400).json({ status: 'failed', message: 'Track Image is required.' });
+        const { albumId, trackImage, audio } = req.body;
+        if (!albumId || !trackImage || !audio) {
+            return res.status(400).json({ message: 'Missing required fields.' });
         }
         
-        const title = req.body.title || (audioFile ? audioFile.originalname : "Untitled");
+        const title = req.body.title ||  "Untitled";
         const artist = req.body.artist || "Unknown Artist";
-        let trackImageUrl = trackImage.path;
-        let audioUrl = audioFile.path;
 
         const newTrack = new Track({
             albumId: albumId,
             title: title,
             artist: artist,
-            trackImage: trackImageUrl,
-            audio: audioUrl,
+            trackImage: trackImage,
+            audio: audio,
         })
         await newTrack.save()
 
