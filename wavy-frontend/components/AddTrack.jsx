@@ -41,6 +41,7 @@ function AddTrack() {
     const audioUploadPreset = import.meta.env.VITE_CLOUD_AUDIO_PRESET;
     const trackUploadPreset = import.meta.env.VITE_CLOUD_TRACKIMAGE_PRESET;
 
+    console.log('start')
 
     // 🔹 Upload audio
     const audioData = new FormData()

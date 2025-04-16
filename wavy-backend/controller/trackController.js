@@ -15,8 +15,8 @@ exports.postTrack = async (req, res) => {
             return res.status(400).json({ message: 'Missing required fields.' });
         }
         
-        const title = req.body.title ||  "Untitled";
-        const artist = req.body.artist || "Unknown Artist";
+        const title = req.body.title ? req.body.title : "Untitled";
+        const artist = req.body.artist ? req.body.artist : "Unknown Artist";
 
         const newTrack = new Track({
             albumId: albumId,

@@ -10,14 +10,15 @@ exports.getAlbums = async (req, res) => {
 
 exports.postAlbum = async (req, res) => {
         try {
-            const { artist, description, albumImage } = req.body;
+            const { artist, albumImage } = req.body;
             if (!artist || !albumImage) {
                 return res.status(400).json({ message: 'Album name and image are required' });
             }
+            const description = req.body.description ? req.body.description : "Top Best Songs."
     
             const newAlbum = new Album({
                 artist: artist,
-                description: description || "Top Best Songs.",
+                description: description,
                 albumImage: albumImage
             })
             await newAlbum.save()

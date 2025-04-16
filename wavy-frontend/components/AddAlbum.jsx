@@ -43,7 +43,7 @@ function AddAlbum() {
 
     try {
       let response = await dispatch(createAlbum(formData)).unwrap();
-
+      console.log("dispatched")
       if (response.status === "success") {
         setSuccessMessage("Album added successfully!");
 
