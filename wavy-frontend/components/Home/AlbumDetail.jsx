@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import Track from './Track'
 import Player from './Player'
-import Loader from '../loader'
+import Loader from '../Loader'
 import useAlbumWithTracks from '../../helper/useAlbumWithTracks'
 
 function AlbumDetail() {
