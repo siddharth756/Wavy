@@ -10,7 +10,6 @@ import Player from '../components/Home/Player'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchAlbums, fetchTracks } from '../features/musicSlice'
-import { playTrack } from '../features/musicPlayerSlice'
 
 
 function App() {
@@ -56,7 +55,7 @@ function App() {
 
 
         {selectedTrack && tracks && (
-            <Player tracks={tracks} selectedTrack={selectedTrack} clearTrack={() => dispatch(playTrack(null))}/>
+            <Player tracks={tracks} selectedTrack={selectedTrack}/>
         )}
       </BrowserRouter>
     </>

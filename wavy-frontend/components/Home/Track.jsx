@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setAllTrack, setTrack } from '../../features/musicSlice'
 import Loader from "../Loader"
 
 function Track({ tracks }) {
-  const [isPlayerVisible, setisPlayerVisible] = useState(false)
   const dispatch = useDispatch()
   const trackLoading = useSelector(state => state.albums.trackLoading)
+  const isPlayingPd = useSelector(state => state.player.isPlayingPd)
   const getTrackById = (tracks, id) => {
     if (!tracks || tracks.length === 0) return null;
     return tracks.find(track => track._id === id);
@@ -17,7 +17,6 @@ function Track({ tracks }) {
     if (track && tracks) {
       dispatch(setTrack(track));
       dispatch(setAllTrack(tracks))
-      setisPlayerVisible(true)
     }
   }
 
@@ -35,7 +34,7 @@ function Track({ tracks }) {
           </h1>
         </div>
       ) : (
-        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 ${ isPlayerVisible ? 'pb-44' : 'pb-10'}`}>
+        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 ${ isPlayingPd ? 'pb-44' : ''}`}>
           {tracks.map((track) => (
             <div
               key={track._id}

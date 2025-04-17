@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { playTrack, pauseTrack } from '../../features/musicPlayerSlice';
+import { playTrack, pauseTrack, clearTrack } from '../../features/musicPlayerSlice';
 
-function Player({ selectedTrack, tracks, clearTrack }) {
+function Player({ selectedTrack, tracks }) {
     const dispatch = useDispatch();
     const audioRef = useRef(null);
     const progressRef = useRef(null);
@@ -142,7 +142,7 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                             <div className="flex flex-col justify-center w-full">
                                 <div className="absolute top-2 right-2">
                                     <button
-                                        onClick={clearTrack}
+                                        onClick={()=> dispatch(clearTrack())}
                                         className="text-gray-300 h-10 w-10 hover:bg-neutral-700 rounded-full text-xl"
                                         aria-label="Close player"
                                     >
