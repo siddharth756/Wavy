@@ -22,7 +22,8 @@ function Track({ tracks }) {
   }
 
   return (
-    <><div className={`lg:px-5 md:mt-6 ${isPlayerVisible ? 'pb-44' : ''}`}>
+    <>
+    <div className="lg:px-5 md:mt-6">
       <h1 className="font-bold text-2xl lg:text-3xl text-white pl-6 md:pt-10 pt-6">Tracks</h1>
 
       {trackLoading ? (
@@ -34,7 +35,7 @@ function Track({ tracks }) {
           </h1>
         </div>
       ) : (
-        <div className="grid gap-4 md:px-6 py-4 px-5 md:pt-6 lg:pb-14">
+        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 lg:pb-14 ${ isPlayerVisible ? 'pb-44' : 'pb-10'}`}>
           {tracks.map((track) => (
             <div
               key={track._id}
