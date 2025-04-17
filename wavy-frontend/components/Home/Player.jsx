@@ -158,7 +158,6 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                                     ref={audioRef}
                                     src={currentTrack.audio}
                                     preload="metadata"
-                                    loop
                                 />
 
                                 <div className="flex w-full justify-between text-xs md:text-sm lg:text-base">

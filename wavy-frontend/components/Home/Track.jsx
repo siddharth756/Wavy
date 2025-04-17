@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setAllTrack, setTrack } from '../../features/musicSlice'
+import Loader from "../Loader"
 
 function Track({ tracks }) {
   const [isPlayerVisible, setisPlayerVisible] = useState(false)
   const dispatch = useDispatch()
+  const trackLoading = useSelector(state => state.albums.trackLoading)
   const getTrackById = (tracks, id) => {
     if (!tracks || tracks.length === 0) return null;
     return tracks.find(track => track._id === id);
   };
-  
+
   const handleSelectTrack = (id) => {
     let track = getTrackById(tracks, id)
     if (track && tracks) {
@@ -31,27 +33,29 @@ function Track({ tracks }) {
               </h1>
             </div>
             :
+            (trackLoading ? <Loader /> :
 
-            <div className="grid gap-4 md:px-6 py-4 px-5 md:pt-6 lg:pb-14">
-              {tracks.map((track) => (
-                <div
-                  key={track._id}
-                  onClick={() => handleSelectTrack(track._id)}
-                  className="px-2 rounded bg-gradient-to-r from-neutral-700 cursor-pointer text-white flex items-center gap-4 hover:scale-[1.02] py-2 transition-all text-[12px]"
-                >
-                  <img
-                    src={`${track.trackImage || '../../src/assets/track.png'}`}
-                    alt={track.artist}
-                    className="md:w-16 md:h-16 h-10 w-10 object-cover rounded-md"
-                    loading='lazy'
-                  />
-                  <div className="flex flex-col flex-grow">
-                    <p className="md:text-lg font-bold">{track.title}</p>
-                    <p className="text-sm text-[8px] mt-1 md:text-[12px]">{track.artist}</p>
+              <div className="grid gap-4 md:px-6 py-4 px-5 md:pt-6 lg:pb-14">
+                {tracks.map((track) => (
+                  <div
+                    key={track._id}
+                    onClick={() => handleSelectTrack(track._id)}
+                    className="px-2 rounded bg-gradient-to-r from-neutral-700 cursor-pointer text-white flex items-center gap-4 hover:scale-[1.02] py-2 transition-all text-[12px]"
+                  >
+                    <img
+                      src={`${track.trackImage || '../../src/assets/track.png'}`}
+                      alt={track.artist}
+                      className="md:w-16 md:h-16 h-10 w-10 object-cover rounded-md"
+                      loading='lazy'
+                    />
+                    <div className="flex flex-col flex-grow">
+                      <p className="md:text-lg font-bold">{track.title}</p>
+                      <p className="text-sm text-[8px] mt-1 md:text-[12px]">{track.artist}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )
         }
 
       </div>
