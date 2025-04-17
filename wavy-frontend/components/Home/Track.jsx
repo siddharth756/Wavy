@@ -35,7 +35,7 @@ function Track({ tracks }) {
           </h1>
         </div>
       ) : (
-        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 lg:pb-14 ${ isPlayerVisible ? 'pb-44' : 'pb-10'}`}>
+        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 ${ isPlayerVisible ? 'pb-44' : 'pb-10'}`}>
           {tracks.map((track) => (
             <div
               key={track._id}
