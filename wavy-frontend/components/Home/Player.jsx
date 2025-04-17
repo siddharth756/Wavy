@@ -134,16 +134,16 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                 <div className="flex">
 
                     {/* Invisible space to match sidebar width */}
-                    <div className="hidden md:block md:w-48 xl:w-88" />
+                    <div className="hidden md:block bg-transparent md:w-48 xl:w-88"/>
 
                     {/* Player actual content */}
-                    <div className="flex-1 bg-neutral-800 px-4 py-4">
-                        <div className="text-white flex flex-col md:flex-row w-full md:px-8 mx-auto">
+                    <div className="flex-1 bg-neutral-800 px-4 py-2">
+                        <div className="text-white flex flex-col md:flex-row w-full md:px-8 mx-auto py-2">
                             <div className="flex flex-col justify-center w-full">
                                 <div className="absolute top-2 right-2">
                                     <button
                                         onClick={clearTrack}
-                                        className="text-gray-300 h-10 w-10 hover:bg-neutral-700 rounded-full text-xl px-2 py-1"
+                                        className="text-gray-300 h-10 w-10 hover:bg-neutral-700 rounded-full text-xl"
                                         aria-label="Close player"
                                     >
                                         <i className="fa fa-times"></i>
@@ -151,7 +151,7 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                                 </div>
                                 <div className='w-full text-center'>
                                     <h1 className="text-base font-semibold md:text-lg">{currentTrack.title}</h1>
-                                    <p className="text-sm text-gray-300 mt-2">{currentTrack.artist}</p>
+                                    <p className="text-sm text-gray-300 mt-1">{currentTrack.artist}</p>
                                 </div>
 
                                 <audio
@@ -176,7 +176,7 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                                     onChange={handleSliderChange}
                                 />
 
-                                <div className="flex items-center justify-between gap-4 mt-3 px-2">
+                                <div className="flex items-center justify-between gap-4 mt-1 px-2">
                                     <button onClick={handlePrev} className="text-white text-lg h-10 w-10 rounded-full hover:bg-neutral-700 cursor-pointer">
                                         <i className="fa fa-backward"></i>
                                     </button>

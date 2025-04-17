@@ -32,10 +32,10 @@ export const createTrack = createAsyncThunk('albums/createTrack', async (formDat
 
 
 const initialState = {
-    allAlbums: localStorage.getItem('albums') ? JSON.parse(localStorage.getItem('albums')) : [],
-    allTracks: localStorage.getItem('tracks') ? JSON.parse(localStorage.getItem('tracks')) : [],
-    hasFetchedAlbums: !!localStorage.getItem('albums'),
-    hasFetchedTracks: !!localStorage.getItem('tracks'),
+    allAlbums: sessionStorage.getItem('albums') ? JSON.parse(sessionStorage.getItem('albums')) : [],
+    allTracks: sessionStorage.getItem('tracks') ? JSON.parse(sessionStorage.getItem('tracks')) : [],
+    hasFetchedAlbums: !!sessionStorage.getItem('albums'),
+    hasFetchedTracks: !!sessionStorage.getItem('tracks'),
     albumLoading: false,
     trackLoading: false,
     detailLoading: false,
@@ -67,7 +67,7 @@ const musicSlice = createSlice({
                 state.albumLoading = false;
                 state.allAlbums = action.payload;
                 state.hasFetchedAlbums = true;
-                localStorage.setItem('albums', JSON.stringify(action.payload));
+                sessionStorage.setItem('albums', JSON.stringify(action.payload));
             })
             .addCase(fetchAlbums.rejected, (state, action) => {
                 state.albumLoading = false;
@@ -84,7 +84,7 @@ const musicSlice = createSlice({
                 state.trackLoading = false;
                 state.allTracks = action.payload;
                 state.hasFetchedTracks = true;
-                localStorage.setItem('tracks', JSON.stringify(action.payload));
+                sessionStorage.setItem('tracks', JSON.stringify(action.payload));
             })
             .addCase(fetchTracks.rejected, (state, action) => {
                 state.trackLoading = false;
@@ -101,7 +101,7 @@ const musicSlice = createSlice({
                 const exist = state.allAlbums.some(item => item._id === action.payload._id);
                 if (!exist) {
                     state.allAlbums = [...state.allAlbums, action.payload.newAlbum];
-                    localStorage.setItem('albums', JSON.stringify(state.allAlbums));
+                    sessionStorage.setItem('albums', JSON.stringify(state.allAlbums));
                 }
             })
             .addCase(createAlbum.rejected, (state, action) => {
@@ -119,7 +119,7 @@ const musicSlice = createSlice({
                 const exist = state.allTracks.some(item => item._id === action.payload._id);
                 if (!exist) {
                     state.allTracks = [...state.allTracks, action.payload.newTrack];
-                    localStorage.setItem('tracks', JSON.stringify(state.allTracks));
+                    sessionStorage.setItem('tracks', JSON.stringify(state.allTracks));
                 }
             })
             .addCase(createTrack.rejected, (state, action) => {

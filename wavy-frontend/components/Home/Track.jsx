@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setAllTrack, setTrack } from '../../features/musicSlice'
 
 function Track({ tracks }) {
-
+  const [isPlayerVisible, setisPlayerVisible] = useState(false)
   const dispatch = useDispatch()
   const getTrackById = (tracks, id) => {
     if (!tracks || tracks.length === 0) return null;
@@ -15,13 +15,14 @@ function Track({ tracks }) {
     if (track && tracks) {
       dispatch(setTrack(track));
       dispatch(setAllTrack(tracks))
+      setisPlayerVisible(true)
     }
   }
 
   return (
     <>
-      <div className="lg:px-5 md:mt-6 min-h-68">
-        <h1 className="font-bold text-2xl lg:text-3xl text-white pl-6 pt-8">Tracks</h1>
+      <div className={`lg:px-5 md:mt-6 ${isPlayerVisible ? 'pb-44' : ''}`}>
+        <h1 className="font-bold text-2xl lg:text-3xl text-white pl-6 md:pt-10 pt-6">Tracks</h1>
         {
           tracks.length === 0 ?
             <div className="flex items-center mt-18 justify-center">

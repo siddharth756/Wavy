@@ -6,7 +6,7 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     return (
         <>
-            <nav className="flex flex-col md:flex-row shadow-[inset_0_10px_20px_-10px_rgba(0,0,0,0.7)] bg-neutral-800">
+            <nav className="flex h-full flex-col md:flex-row shadow-[inset_0_10px_20px_-10px_rgba(0,0,0,0.7)] bg-neutral-800">
                 {/* Sidebar for desktop */}
                 <div className="hidden md:flex flex-col rounded-lg text-white xl:w-88 w-48 min-h-screen p-6 space-y-6">
                     <NavLink to="/" className="text-2xl font-bold mb-6">
