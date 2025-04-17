@@ -109,7 +109,7 @@ function Player({ selectedTrack, tracks, clearTrack }) {
                 audio.removeEventListener('ended', handleEnded);
             }
         };
-    }, [currentTrack]);
+    }, [currentTrack, updateSliderBackground, handleNext]);
 
     useEffect(() => {
         if (audioRef.current) {
