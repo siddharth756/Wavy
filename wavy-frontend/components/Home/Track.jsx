@@ -34,7 +34,7 @@ function Track({ tracks }) {
           </h1>
         </div>
       ) : (
-        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 ${ isPlayingPd ? 'pb-44' : ''}`}>
+        <div className={`grid gap-4 md:px-6 py-4 px-5 md:pt-6 ${ isPlayingPd ? 'pb-40' : ''}`}>
           {tracks.map((track) => (
             <div
               key={track._id}

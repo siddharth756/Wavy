@@ -19,11 +19,18 @@ function AlbumDetail() {
   return (
     <>
       <div className="grid grid-cols-1 xl:grid-cols-2 overflow-y-hidden">
+
         {/* First Column: Album Info & Player */}
-        <div className='flex px-4 flex-col h-fit md:mt-5'>
+        <div className='flex px-4 flex-col h-fit md:mt-10'>
+        <button
+          onClick={handleBack}
+          className="text-gray-400 hover:text-white mt-5 ml-6 md:ml-5 w-fit text-left text-xl cursor-pointer"
+        >
+          <span className="text-xl lg:text-2xl">Back</span>
+        </button>
           {/* Album Info */}
           {album &&
-            <div className="flex flex-col justify-around px-4 md:flex-row items-center md:items-start text-white pt-8 pb-4 rounded-lg max-w-4xl mx-auto">
+            <div className="flex flex-col justify-around px-4 md:flex-row items-center md:items-start text-white pt-4 md:pt-8 pb-4 rounded-lg max-w-4xl mx-auto">
               {/* Album Image */}
               <div className="w-40 h-40 md:w-48 md:h-48 flex-shrink-0 mb-4 md:mb-0 md:mr-6">
                 <img
@@ -40,14 +47,6 @@ function AlbumDetail() {
                   <p className="text-sm text-gray-300">{album.description}</p>
                   <p className="text-sm md:text-lg text-gray-300 mt-2">Total songs: {tracks.length}</p>
                 </div>
-
-                <button
-                  onClick={handleBack}
-                  className="text-gray-400 hover:text-white text-left text-xl cursor-pointer mt-4 md:mt-0"
-                >
-                  <i className='fa fa-arrow-left mr-2'></i>
-                  <span className="text-xl lg:text-2xl">Back</span>
-                </button>
               </div>
 
             </div>

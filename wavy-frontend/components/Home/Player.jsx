@@ -134,24 +134,27 @@ function Player({ selectedTrack, tracks }) {
                 <div className="flex">
 
                     {/* Invisible space to match sidebar width */}
-                    <div className="hidden md:block bg-transparent md:w-48 xl:w-88"/>
+                    <div className="hidden md:block bg-transparent md:w-48 xl:w-88" />
 
                     {/* Player actual content */}
-                    <div className="flex-1 bg-neutral-800 px-4 py-2">
-                        <div className="text-white flex flex-col md:flex-row w-full md:px-8 mx-auto py-2">
+                    <div className="flex-1 bg-neutral-800 px-4 py-2 pt-3">
+                        <div className="text-white flex flex-col md:flex-row w-full md:px-8 mx-auto">
                             <div className="flex flex-col justify-center w-full">
-                                <div className="absolute top-2 right-2">
-                                    <button
-                                        onClick={()=> dispatch(clearTrack())}
-                                        className="text-gray-300 h-10 w-10 hover:bg-neutral-700 rounded-full text-xl"
-                                        aria-label="Close player"
-                                    >
-                                        <i className="fa fa-times"></i>
-                                    </button>
-                                </div>
-                                <div className='w-full text-center'>
-                                    <h1 className="text-base font-semibold md:text-lg">{currentTrack.title}</h1>
-                                    <p className="text-sm text-gray-300 mt-1">{currentTrack.artist}</p>
+                                <div className='w-full flex justify-between'>
+                                    <div className='hidden md:block'></div>
+                                    <div className='text-start md:text-center'>
+                                        <h1 className="text-[14px] font-semibold md:text-lg">{currentTrack.title}</h1>
+                                        <p className="text-[10px] md:text-sm text-gray-300">{currentTrack.artist}</p>
+                                    </div>
+                                    <div>
+                                        <button
+                                            onClick={() => dispatch(clearTrack())}
+                                            className="text-gray-300 h-6 w-6 md:h-10 md:w-10 hover:bg-neutral-700 rounded-full text-xl"
+                                            aria-label="Close player"
+                                        >
+                                            <i className="fa fa-times"></i>
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <audio
@@ -160,7 +163,7 @@ function Player({ selectedTrack, tracks }) {
                                     preload="metadata"
                                 />
 
-                                <div className="flex w-full justify-between text-xs md:text-sm lg:text-base">
+                                <div className="flex w-full mt-2 justify-between text-xs md:text-sm lg:text-base">
                                     <span>{formatTime(currentTime)}</span>
                                     <span>{formatTime(duration)}</span>
                                 </div>
@@ -169,7 +172,7 @@ function Player({ selectedTrack, tracks }) {
                                 <input
                                     type="range"
                                     ref={progressRef}
-                                    className="custom-slider mt-2"
+                                    className="custom-slider mt-1"
                                     value={currentTime}
                                     max={duration || 0}
                                     onChange={handleSliderChange}
