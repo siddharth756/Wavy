@@ -28,6 +28,7 @@ def _build_yt_dlp_options(output_dir: Path) -> dict:
         "quiet": True,
         "no_warnings": True,
         "noplaylist": True,
+        "extractor_args": {"youtube": ["player_client=android,web", "skip=webpage"]},
     }
     cookies_path = Path("app/cookies.txt")
     if cookies_path.exists():
@@ -45,6 +46,7 @@ def _extract_metadata(url: str) -> dict:
         "no_warnings": True,
         "noplaylist": True,
         "skip_download": True,
+        "extractor_args": {"youtube": ["player_client=android,web", "skip=webpage"]},
     }
     cookies_path = Path("app/cookies.txt")
     if cookies_path.exists():
