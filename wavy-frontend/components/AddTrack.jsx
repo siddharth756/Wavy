@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createTrack } from '../features/musicSlice'
 import { useSelector } from 'react-redux'
@@ -8,29 +8,21 @@ import axios from 'axios'
 function AddTrack() {
 
   const allAlbums = useSelector(state => state.albums.allAlbums)
-  const [albumName, setalbumName] = useState('')
+  const [albumId, setalbumId] = useState('')
   const [title, settitle] = useState('')
   const [artist, setartist] = useState('')
   const [trackImage, settrackImage] = useState(null)
   const [audio, setaudio] = useState(null)
-  const [albumId, setalbumId] = useState(null)
   const [successMessage, setSuccessMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    if (albumName) {
-      const res = allAlbums.find((item) => item.artist.toLowerCase() === albumName.toLowerCase())
-      setalbumId(res ? res._id : null)
-    };
-  }, [albumName, allAlbums])
-
   const handlesubmit = async (e) => {
     e.preventDefault();
 
     if (!albumId) {
-      alert('Invalid album name.');
+      alert('Please select an album.');
       return;
     }
     setIsLoading(true);
@@ -86,8 +78,7 @@ function AddTrack() {
       console.log(error)
     } finally {
       setIsLoading(false)
-      setalbumId(null)
-      setalbumName('')
+      setalbumId('')
       setartist('')
       settitle('')
       settrackImage(null)
@@ -109,13 +100,23 @@ function AddTrack() {
         {/* Album Name */}
         <div>
           <label className="block text-base font-medium mb-2">Album Name</label>
-          <input
-            type="text"
-            value={albumName}
-            onChange={(e) => setalbumName(e.target.value)}
-            className="w-full px-4 py-3 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            placeholder="Album Name"
-          />
+          <div className="relative">
+            <select
+              value={albumId}
+              onChange={(e) => setalbumId(e.target.value)}
+              className={`form-select w-full px-4 py-3 pr-10 rounded-md border border-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${!albumId ? 'placeholder' : ''}`}
+            >
+              <option value="" disabled>Select an album</option>
+              {allAlbums.map((album) => (
+                <option key={album._id} value={album._id}>
+                  {album.artist}
+                </option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-4 text-gray-400">
+              <i className="fa fa-chevron-down text-sm" />
+            </span>
+          </div>
         </div>
 
         {/* Song Title */}

@@ -119,4 +119,27 @@ body {
     border: none;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
   }
+
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    color: white;
+    background-color: transparent;
+  }
+
+  .form-select:invalid,
+  .form-select.placeholder {
+    color: rgb(156 163 175);
+  }
+
+  .form-select option {
+    background-color: rgb(23 23 23);
+    color: white;
+  }
+
+  .form-select option[disabled] {
+    color: rgb(156 163 175);
+  }
   
