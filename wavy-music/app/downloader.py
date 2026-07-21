@@ -1,3 +1,4 @@
+import os
 import shutil
 import tempfile
 from pathlib import Path
@@ -13,7 +14,7 @@ class DownloadError(Exception):
 
 def _build_yt_dlp_options(output_dir: Path) -> dict:
     """Build yt-dlp options for extracting best audio as mp3."""
-    return {
+    opts = {
         "format": "bestaudio/best",
         "outtmpl": str(output_dir / "%(title)s.%(ext)s"),
         "postprocessors": [
@@ -28,6 +29,13 @@ def _build_yt_dlp_options(output_dir: Path) -> dict:
         "no_warnings": True,
         "noplaylist": True,
     }
+    cookies_path = Path("app/cookies.txt")
+    if cookies_path.exists():
+        opts["cookiefile"] = str(cookies_path)
+    proxy = os.environ.get("YT_PROXY", "")
+    if proxy:
+        opts["proxy"] = proxy
+    return opts
 
 
 def _extract_metadata(url: str) -> dict:
@@ -38,6 +46,9 @@ def _extract_metadata(url: str) -> dict:
         "noplaylist": True,
         "skip_download": True,
     }
+    cookies_path = Path("app/cookies.txt")
+    if cookies_path.exists():
+        opts["cookiefile"] = str(cookies_path)
 
     try:
         with yt_dlp.YoutubeDL(opts) as ydl:
