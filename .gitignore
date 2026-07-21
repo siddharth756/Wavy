@@ -64,3 +64,8 @@ wavy-backend/node_modules
 wavy-frontend/.env 
 wavy-frontend/node_modules
 wavy-frontend/dist
+
+wavy-music/.env
+wavy-music/.venv
+wavy-music/venv
+wavy-music/__pycache__

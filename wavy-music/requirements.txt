@@ -1,0 +1,6 @@
+fastapi>=0.115.6
+uvicorn[standard]>=0.34.0
+yt-dlp>=2025.6.9
+cloudinary>=1.42.0
+python-dotenv>=1.0.1
+pydantic>=2.11.0

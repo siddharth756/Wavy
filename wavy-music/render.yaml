@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: wavy-music
+    env: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: CLOUDINARY_AUDIO_FOLDER
+        value: wavy/audio
+      - key: CLOUDINARY_IMAGE_FOLDER
+        value: wavy/trackImages
+      - key: ALLOWED_ORIGINS
+        sync: false
+      - key: API_KEY
+        sync: false
