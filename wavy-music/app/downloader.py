@@ -56,10 +56,7 @@ def _extract_metadata(url: str) -> dict:
         with yt_dlp.YoutubeDL(opts) as ydl:
             info = ydl.extract_info(url, download=False)
     except yt_dlp.utils.DownloadError as exc:
-        raise DownloadError(
-            "Could not extract info from this URL. "
-            "Make sure it is a valid and supported music link."
-        ) from exc
+        raise DownloadError(f"Extract failed: {exc}") from exc
 
     if info is None:
         raise DownloadError("No metadata found for this URL.")
